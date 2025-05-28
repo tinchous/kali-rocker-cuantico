@@ -1,57 +1,63 @@
 #!/bin/bash
 
-# =========================================
-#   KALI ROCKER CUÁNTICO INSTALLER 🤘🧠⚡
-# =========================================
-# Autor: Tino + Onit
-# Descripción: Automatiza la personalización de Kali Linux
-# con una estética visual hacker-rockera-cósmica 💀🎸
+# ╔════════════════════════════════════════╗
+# ║   KALI ROCKER CUÁNTICO - by Tinchous   ║
+# ║      Tuneá tu Kali con puro Rock!      ║
+# ╚════════════════════════════════════════╝
 
-# Mensaje de bienvenida
+echo "🔥 Iniciando la personalización Kali Rocker Cuántico..."
+
+# 1. ACTUALIZAMOS EL SISTEMA
+echo "🛠️  Actualizando paquetes..."
+sudo apt update && sudo apt upgrade -y
+
+# 2. INSTALAMOS HERRAMIENTAS ESENCIALES
+echo "🔧 Instalando herramientas esenciales..."
+sudo apt install -y zsh git curl wget lolcat figlet neofetch cmatrix mpg123
+
+# 3. CAMBIAMOS LA SHELL POR DEFECTO A ZSH
+echo "💻 Cambiando shell por defecto a ZSH (puede pedir contraseña)..."
+chsh -s $(which zsh)
+
+# 4. INSTALAMOS OH-MY-ZSH
+echo "🎩 Instalando Oh My Zsh..."
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# 5. INSTALAMOS POWERLEVEL10K (tema visual zarpado)
+echo "✨ Instalando tema Powerlevel10k..."
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
+sed -i 's|ZSH_THEME=.*|ZSH_THEME="powerlevel10k/powerlevel10k"|' ~/.zshrc
+
+# 6. AGREGAMOS BANNER PERSONALIZADO Y EFECTOS EN TERMINAL
+echo "🎨 Personalizando la terminal..."
+
+cat << 'EOF' >> ~/.zshrc
+
+# 🔥 ESTILO ROCKER AL INICIAR TERMINAL
 clear
-figlet "KALI ROCKER" | lolcat
-sleep 1
-echo "🔥 Iniciando personalización Cuántica Rockera..."
-sleep 1
+figlet "TINO ROCKER" | lolcat
+neofetch --ascii_distro Kali
 
-# Actualización del sistema
-sudo apt update && sudo apt full-upgrade -y
-
-# Herramientas visuales y útiles
-sudo apt install -y neofetch lolcat figlet cmatrix htop ncdu mpv xwinwrap mpg123 zsh git curl fonts-powerline xfce4-terminal
-
-# ZSH + Oh-My-Zsh
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  echo "🎸 Instalando Oh-My-Zsh..."
-  chsh -s $(which zsh)
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# 🎶 Reproducir MP3 al iniciar (si existe el archivo)
+if [ -f "$HOME/Música/rockon.mp3" ]; then
+  mpg123 "$HOME/Música/rockon.mp3" &
 fi
 
-# Tema Powerlevel10k para ZSH
-if [ ! -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
-  sed -i 's/ZSH_THEME=.*/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/' ~/.zshrc
-fi
+# 💊 Extra: efectos visuales locos opcionales
+# cmatrix -b -C cyan &
 
-# ASCII banner personalizado en .zshrc
-if ! grep -q 'figlet "TINO ROCKER"' ~/.zshrc; then
-  echo "figlet \"TINO ROCKER\" | lolcat" >> ~/.zshrc
-  echo "neofetch" >> ~/.zshrc
-fi
-
-# Auto-reproducción de MP3 al inicio (colocar rockon.mp3 en ~/Música)
-mkdir -p ~/.config/autostart
-cat << EOF > ~/.config/autostart/rockon.desktop
-[Desktop Entry]
-Type=Application
-Exec=mpg123 --loop -1 /home/\$USER/Música/rockon.mp3
-Hidden=false
-NoDisplay=false
-X-GNOME-Autostart-enabled=true
-Name=Rock On Startup
 EOF
 
-# Fin del script
-echo "✅ ¡Kali Rocker Cuántico instalado! Reiniciá o cerrá sesión para activar la música y los efectos."
-echo "🎸 ¡Larga vida al Rock Cuántico! 🧠"
+# 7. CREAMOS DIRECTORIO PARA LA MÚSICA SI NO EXISTE
+mkdir -p "$HOME/Música"
+
+echo "🎶 Colocá tu archivo MP3 en ~/Música/ con el nombre 'rockon.mp3'"
+echo "   (o descargalo desde la carpeta /extras del repositorio) 🎧"
+
+# 8. FIN
+echo -e "\n✅ ¡Listo! Cerrá y abrí tu terminal para ver el cambio."
+echo "🤘 LARGA VIDA AL ROCK CUÁNTICO"
+
+# OPCIONAL: REINICIAR LA SHELL AUTOMÁTICAMENTE
+exec zsh
 
